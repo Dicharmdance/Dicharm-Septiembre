@@ -1,0 +1,8 @@
+{
+  "name": "dicharm-dance-landing",
+  "version": "1.0.0",
+  "description": "Landing page y backend de pagos para Dicharm Dance",
+  "dependencies": {
+    "stripe": "^16.0.0"
+  }
+}

@@ -1,4 +1,3 @@
-[README.md](https://github.com/user-attachments/files/29310508/README.md)
 # Dicharm Dance — Sistema Web de Inscripciones
 
 Sitio web de inscripciones para **Dicharm Dance**, escuela de baile en Sant Boi de Llobregat (Barcelona).

@@ -1,0 +1,357 @@
+/**
+ * GOOGLE APPS SCRIPT — Dicharm Dance
+ * ====================================
+ * Gestiona dos flujos:
+ *
+ *  1) doPost()  → recibe inscripciones automáticas desde Netlify
+ *                 (tanto Stripe como Transferencia) y las anota en Sheets.
+ *
+ *  2) onEdit()  → detecta cuando marcas manualmente una transferencia como
+ *                 "Confirmado" en la columna Estado y envía el email de
+ *                 confirmación definitiva al alumno de forma automática.
+ *
+ *  3) Menú "Dicharm 💜" → aparece en la barra superior de Sheets con
+ *                         acciones manuales útiles.
+ *
+ * ─────────────────────────────────────────────────────────────────────────
+ * INSTALACIÓN
+ * ─────────────────────────────────────────────────────────────────────────
+ * 1) Abre Dicharm_Dance_Gestion_Clientes en Google Sheets.
+ * 2) Extensiones → Apps Script → borra el código por defecto y pega este.
+ * 3) En el menú izquierdo, ve a "Activadores" (icono reloj) y añade:
+ *      · Función: onEdit  |  Tipo: Al editar  |  Hoja: desde la hoja de cálculo
+ *    (Esto permite que onEdit funcione aunque no estés mirando la hoja.)
+ * 4) Desplegar → Nueva implementación → Aplicación web
+ *      Ejecutar como: Yo  |  Acceso: Cualquier usuario
+ * 5) Copia la URL /exec → es tu GOOGLE_SHEETS_WEBHOOK_URL en Netlify.
+ *
+ * ─────────────────────────────────────────────────────────────────────────
+ * CONFIGURACIÓN (ajusta estas constantes)
+ * ─────────────────────────────────────────────────────────────────────────
+ */
+
+const CONFIG = {
+  // Nombre exacto de las pestañas en tu Google Sheet
+  hojaAlumnos:       'Alumnos Activos',
+  hojaPendientes:    'Pendientes Transferencia',
+  hojaPagos:         'Pagos',
+
+  // Email desde el que se envían las confirmaciones
+  // Debe ser el mismo Gmail con el que tienes el script
+  emailRemitente:    'dicharmdance@gmail.com',
+  nombreRemitente:   'Dicharm Dance',
+
+  // Columna de la hoja "Pendientes Transferencia" donde está el estado
+  // (cuenta desde 1: A=1, B=2, C=3…)
+  colEstado:         10,   // columna J → Estado
+  colEmail:          3,    // columna C → Email
+  colNombre:         2,    // columna B → Nombre
+  colClases:         7,    // columna G → Clases
+  colHoras:          8,    // columna H → Horas/semana
+  colPrecioBase:     9,    // columna I → Importe
+  colConfirmado:     11,   // columna K → Email enviado (flag para no reenviar)
+};
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 1. MENÚ PERSONALIZADO
+// ═══════════════════════════════════════════════════════════════════════════
+
+function onOpen() {
+  SpreadsheetApp.getUi()
+    .createMenu('Dicharm 💜')
+    .addItem('✉️  Enviar confirmación a seleccionado', 'enviarConfirmacionManual')
+    .addSeparator()
+    .addItem('📋 Mover confirmado a Alumnos Activos', 'moverConfirmadoAActivos')
+    .addSeparator()
+    .addItem('🔄 Forzar comprobación de pendientes', 'comprobarPendientes')
+    .addToUi();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 2. WEBHOOK — recibe inscripciones desde Netlify
+// ═══════════════════════════════════════════════════════════════════════════
+
+function doPost(e) {
+  try {
+    const body  = JSON.parse(e.postData.contents);
+    const datos = body.datos;
+    const tipo  = body.tipo || 'nueva_inscripcion';
+
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+
+    if (tipo === 'nueva_inscripcion') {
+      const formaPago = datos.forma_pago || 'Tarjeta (Stripe)';
+      const estado    = datos.estado     || 'Pagado';
+
+      if (formaPago === 'Transferencia') {
+        // → pestaña Pendientes Transferencia
+        const hoja = ss.getSheetByName(CONFIG.hojaPendientes);
+        hoja.appendRow([
+          new Date(),           // A: Fecha solicitud
+          datos.nombre,         // B: Nombre
+          datos.email,          // C: Email
+          datos.telefono,       // D: Teléfono
+          datos.edad,           // E: Edad
+          datos.clases,         // F: Clases
+          datos.horas_semanales,// G: Horas/semana (nombre corregido)
+          datos.precio_base,    // H: Importe
+          'Transferencia',      // I: Forma de pago
+          'Pendiente de pago',  // J: Estado  ← aquí miras y cambias
+          '',                   // K: Email confirmación enviado
+          '',                   // L: Notas
+        ]);
+
+      } else {
+        // → pestaña Alumnos Activos (pago con Stripe ya confirmado)
+        const hojaAlumnos = ss.getSheetByName(CONFIG.hojaAlumnos);
+        const hojaPagos   = ss.getSheetByName(CONFIG.hojaPagos);
+        const nuevoId     = hojaAlumnos.getLastRow() - 3;
+
+        const gastosGestion = datos.gastos_gestion
+          ? parseFloat(datos.gastos_gestion)
+          : ((parseFloat(datos.precio_base) + 0.25) / (1 - 0.015) - parseFloat(datos.precio_base));
+
+        hojaAlumnos.appendRow([
+          nuevoId,
+          datos.nombre,
+          datos.email,
+          datos.telefono,
+          new Date(),
+          datos.edad,
+          datos.clases,
+          datos.horas_semanales,
+          datos.precio_base,
+          'Pagado',
+          datos.fechaPago || new Date(),
+          'Sí',
+          'Tarjeta (Stripe)',
+          '',
+        ]);
+
+        const mesActual = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM');
+        hojaPagos.appendRow([
+          nuevoId,
+          datos.nombre,
+          mesActual,
+          datos.importePagado || datos.precio_base,
+          datos.fechaPago || new Date(),
+          'Tarjeta (Stripe)',
+          'Pagado',
+          gastosGestion.toFixed(2),
+          datos.precio_base,
+        ]);
+      }
+    }
+
+    return ContentService
+      .createTextOutput(JSON.stringify({ status: 'ok' }))
+      .setMimeType(ContentService.MimeType.JSON);
+
+  } catch (err) {
+    console.error(err);
+    return ContentService
+      .createTextOutput(JSON.stringify({ status: 'error', message: err.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 3. DETECCIÓN AUTOMÁTICA DE CAMBIO DE ESTADO
+//    Se dispara cada vez que editas cualquier celda de la hoja.
+//    Si cambias el Estado (col J) a "Confirmado" en "Pendientes Transferencia",
+//    envía el email de confirmación al alumno automáticamente.
+// ═══════════════════════════════════════════════════════════════════════════
+
+function onEdit(e) {
+  const hoja = e.range.getSheet();
+  if (hoja.getName() !== CONFIG.hojaPendientes) return;
+
+  const col = e.range.getColumn();
+  const fila = e.range.getRow();
+  if (col !== CONFIG.colEstado) return;        // solo nos interesa la col Estado
+  if (fila <= 1) return;                        // ignorar cabecera
+
+  const nuevoValor = e.range.getValue().toString().trim().toLowerCase();
+  if (nuevoValor !== 'confirmado') return;
+
+  // Comprobar que no hayamos enviado ya el email (col K)
+  const yaEnviado = hoja.getRange(fila, CONFIG.colConfirmado).getValue();
+  if (yaEnviado === 'Sí') {
+    SpreadsheetApp.getUi().alert('⚠️ El email de confirmación ya fue enviado a este alumno.');
+    return;
+  }
+
+  const nombre     = hoja.getRange(fila, CONFIG.colNombre).getValue();
+  const email      = hoja.getRange(fila, CONFIG.colEmail).getValue();
+  const clases     = hoja.getRange(fila, CONFIG.colClases).getValue();
+  const horas      = hoja.getRange(fila, CONFIG.colHoras).getValue();
+  const precioBase = hoja.getRange(fila, CONFIG.colPrecioBase).getValue();
+
+  const exito = enviarEmailConfirmacion(nombre, email, clases, horas, precioBase);
+
+  if (exito) {
+    // Marcar como enviado para no reenviar
+    hoja.getRange(fila, CONFIG.colConfirmado).setValue('Sí');
+    // Mover a Alumnos Activos
+    moverFilaAActivos(hoja, fila, nombre, email, clases, horas, precioBase);
+    SpreadsheetApp.getActiveSpreadsheet().toast(
+      `✅ Confirmación enviada a ${email}`, 'Dicharm Dance', 5
+    );
+  } else {
+    SpreadsheetApp.getUi().alert(`⚠️ No se pudo enviar el email a ${email}. Comprueba la dirección.`);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 4. FUNCIÓN AUXILIAR — enviar email de confirmación definitiva
+// ═══════════════════════════════════════════════════════════════════════════
+
+function enviarEmailConfirmacion(nombre, email, clases, horas, precioBase) {
+  try {
+    const asunto = '¡Tu plaza en Dicharm Dance está confirmada! 🎉';
+    const cuerpoHtml = `
+      <div style="font-family:Arial,sans-serif; max-width:560px; margin:0 auto;
+                  padding:30px; background:#0e0a16; color:#ffffff; border-radius:16px;">
+        <h1 style="background:linear-gradient(90deg,#ff2bd6,#8a2be2,#1e6bff);
+                   -webkit-background-clip:text; background-clip:text;
+                   color:transparent; font-size:26px;">
+          ¡Bienvenido/a, ${nombre}! 🎉
+        </h1>
+        <p>Hemos recibido tu transferencia correctamente. Tu plaza para la temporada
+           2024-25 está <strong>confirmada</strong>.</p>
+
+        <div style="background:rgba(255,255,255,.06); border-radius:12px;
+                    padding:20px; margin:20px 0; line-height:1.9;">
+          <p style="margin:4px 0;">📚 <strong>Clases:</strong> ${clases}</p>
+          <p style="margin:4px 0;">⏱️ <strong>Horas semanales:</strong> ${horas}h</p>
+          <p style="margin:4px 0;">💶 <strong>Mensualidad:</strong> ${precioBase}€/mes</p>
+          <p style="margin:4px 0;">📅 <strong>Inicio:</strong> Septiembre 2025</p>
+        </div>
+
+        <p>📍 <strong>Dónde encontrarnos:</strong><br>
+           Carrer d'Eusebi Güell 43, Sant Boi de Llobregat, Barcelona</p>
+
+        <p>Si tienes cualquier pregunta antes del inicio, escríbenos a
+           <a href="mailto:dicharmdance@gmail.com"
+              style="color:#ff2bd6;">dicharmdance@gmail.com</a>
+           o por WhatsApp.</p>
+
+        <p style="margin-top:24px;">¡Nos vemos en la pista! 💃🕺</p>
+        <p style="color:#b9b3c9; font-size:12px; margin-top:30px;">
+          Dicharm Dance · Carrer d'Eusebi Güell 43, Sant Boi de Llobregat
+        </p>
+      </div>
+    `;
+
+    GmailApp.sendEmail(email, asunto, '', {
+      from:     CONFIG.emailRemitente,
+      name:     CONFIG.nombreRemitente,
+      htmlBody: cuerpoHtml,
+    });
+    return true;
+  } catch (err) {
+    console.error('Error enviando email de confirmación:', err);
+    return false;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 5. MOVER FILA DE PENDIENTES → ALUMNOS ACTIVOS
+// ═══════════════════════════════════════════════════════════════════════════
+
+function moverFilaAActivos(hojaPendientes, fila, nombre, email, clases, horas, precioBase) {
+  try {
+    const ss          = SpreadsheetApp.getActiveSpreadsheet();
+    const hojaAlumnos = ss.getSheetByName(CONFIG.hojaAlumnos);
+    const hojaPagos   = ss.getSheetByName(CONFIG.hojaPagos);
+    const nuevoId     = hojaAlumnos.getLastRow() - 3;
+    const hojaPend    = hojaPendientes || ss.getSheetByName(CONFIG.hojaPendientes);
+
+    const edad = hojaPend.getRange(fila, 5).getValue();
+
+    hojaAlumnos.appendRow([
+      nuevoId, nombre, email,
+      hojaPend.getRange(fila, 4).getValue(), // teléfono
+      new Date(), edad, clases, horas, precioBase,
+      'Pagado', new Date(), 'Sí', 'Transferencia', '',
+    ]);
+
+    const mesActual = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM');
+    hojaPagos.appendRow([
+      nuevoId, nombre, mesActual, precioBase,
+      new Date(), 'Transferencia', 'Pagado', 0, precioBase,
+    ]);
+
+    // Tachar la fila en Pendientes para que se vea visualmente que está procesada
+    hojaPend.getRange(fila, 1, 1, hojaPend.getLastColumn())
+      .setFontLine('line-through')
+      .setFontColor('#888888');
+  } catch (err) {
+    console.error('Error moviendo fila a Activos:', err);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 6. ACCIONES DEL MENÚ MANUAL
+// ═══════════════════════════════════════════════════════════════════════════
+
+function enviarConfirmacionManual() {
+  const hoja = SpreadsheetApp.getActiveSheet();
+  if (hoja.getName() !== CONFIG.hojaPendientes) {
+    SpreadsheetApp.getUi().alert('Selecciona una fila en la pestaña "Pendientes Transferencia".');
+    return;
+  }
+  const fila = SpreadsheetApp.getActiveRange().getRow();
+  if (fila <= 1) { SpreadsheetApp.getUi().alert('Selecciona una fila de datos, no la cabecera.'); return; }
+
+  const nombre     = hoja.getRange(fila, CONFIG.colNombre).getValue();
+  const email      = hoja.getRange(fila, CONFIG.colEmail).getValue();
+  const clases     = hoja.getRange(fila, CONFIG.colClases).getValue();
+  const horas      = hoja.getRange(fila, CONFIG.colHoras).getValue();
+  const precioBase = hoja.getRange(fila, CONFIG.colPrecioBase).getValue();
+
+  const ui = SpreadsheetApp.getUi();
+  const resp = ui.alert(
+    '¿Enviar confirmación?',
+    `Se enviará el email de confirmación definitiva a:\n${nombre} (${email})`,
+    ui.ButtonSet.OK_CANCEL
+  );
+  if (resp !== ui.Button.OK) return;
+
+  const exito = enviarEmailConfirmacion(nombre, email, clases, horas, precioBase);
+  if (exito) {
+    hoja.getRange(fila, CONFIG.colEstado).setValue('Confirmado');
+    hoja.getRange(fila, CONFIG.colConfirmado).setValue('Sí');
+    moverFilaAActivos(hoja, fila, nombre, email, clases, horas, precioBase);
+    ui.alert(`✅ Email enviado correctamente a ${email}`);
+  } else {
+    ui.alert(`⚠️ Error al enviar. Comprueba la dirección: ${email}`);
+  }
+}
+
+function moverConfirmadoAActivos() {
+  const hoja = SpreadsheetApp.getActiveSheet();
+  if (hoja.getName() !== CONFIG.hojaPendientes) {
+    SpreadsheetApp.getUi().alert('Selecciona una fila en "Pendientes Transferencia".');
+    return;
+  }
+  const fila = SpreadsheetApp.getActiveRange().getRow();
+  const nombre = hoja.getRange(fila, CONFIG.colNombre).getValue();
+  const email  = hoja.getRange(fila, CONFIG.colEmail).getValue();
+  const clases = hoja.getRange(fila, CONFIG.colClases).getValue();
+  const horas  = hoja.getRange(fila, CONFIG.colHoras).getValue();
+  const precio = hoja.getRange(fila, CONFIG.colPrecioBase).getValue();
+  moverFilaAActivos(hoja, fila, nombre, email, clases, horas, precio);
+  SpreadsheetApp.getUi().alert(`✅ ${nombre} movido/a a Alumnos Activos.`);
+}
+
+function comprobarPendientes() {
+  const hoja = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(CONFIG.hojaPendientes);
+  const datos = hoja.getDataRange().getValues();
+  let pendientes = 0;
+  for (let i = 1; i < datos.length; i++) {
+    const estado = datos[i][CONFIG.colEstado - 1];
+    if (estado === 'Pendiente de pago') pendientes++;
+  }
+  SpreadsheetApp.getUi().alert(`Hay ${pendientes} transferencia(s) pendientes de confirmar.`);
+}
