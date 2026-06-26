@@ -1039,7 +1039,7 @@
   function selectPayment(el){
     document.querySelectorAll('.pay-opt').forEach(p=>p.classList.remove('selected'));
     el.classList.add('selected');
-    document.getElementById('signup-form').dataset.payment = el.dataset.method;
+    document.getElementById('signup-form').dataset.method = el.dataset.method;
 
     const transferBox = document.getElementById('transfer-box');
     if(el.dataset.method === 'Transferencia'){
