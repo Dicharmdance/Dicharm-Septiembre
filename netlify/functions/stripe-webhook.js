@@ -58,8 +58,6 @@ console.log('Webhook recibido', event.httpMethod);
           'Content-Type': 'application/json',
         },
 
-const resendResult = await emailRes.json();
-console.log('Resend response:', JSON.stringify(resendResult));
 
         body: JSON.stringify({
           from: process.env.SCHOOL_EMAIL_FROM,
