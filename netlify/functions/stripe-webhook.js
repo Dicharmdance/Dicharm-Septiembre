@@ -49,12 +49,17 @@ exports.handler = async function (event) {
 
     // 1) Enviar email de confirmación automático
     try {
-      await fetch('https://api.resend.com/emails', {
+     console.log('Intentando enviar email a:', cliente.email);
+ const emailRes = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
           'Content-Type': 'application/json',
         },
+
+const resendResult = await emailRes.json();
+console.log('Resend response:', JSON.stringify(resendResult));
+
         body: JSON.stringify({
           from: process.env.SCHOOL_EMAIL_FROM,
           to: cliente.email,
