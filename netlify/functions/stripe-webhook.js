@@ -59,6 +59,7 @@ console.log('Webhook recibido', event.httpMethod);
         },
 
 
+
         body: JSON.stringify({
           from: process.env.SCHOOL_EMAIL_FROM,
           to: cliente.email,
@@ -80,6 +81,8 @@ console.log('Webhook recibido', event.httpMethod);
           `,
         }),
       });
+const resendBody = await emailRes.json();
+console.log('Resend status:', emailRes.status, JSON.stringify(resendBody));
     } catch (err) {
       console.error('Error enviando email de confirmación:', err);
     }
