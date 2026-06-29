@@ -16,6 +16,7 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 exports.handler = async function (event) {
+console.log('Webhook recibido', event.httpMethod);
   const sig = event.headers['stripe-signature'];
   let stripeEvent;
 
