@@ -46,6 +46,21 @@ console.log('Webhook recibido', event.httpMethod);
       importePagado: (session.amount_total / 100).toFixed(2),
       fechaPago: new Date().toISOString(),
       stripeSessionId: session.id,
+      dni: meta.dni || '',
+      fechaNacimiento: meta.fecha_nacimiento || '',
+      tutor1Nombre: meta.tutor1_nombre || '',
+      tutor1Telefono: meta.tutor1_telefono || '',
+      tutor1Email: meta.tutor1_email || '',
+      tutor1Relacion: meta.tutor1_relacion || '',
+      tutor1Dni: meta.tutor1_dni || '',
+      tutor2Nombre: meta.tutor2_nombre || '',
+      tutor2Telefono: meta.tutor2_telefono || '',
+      tutor2Email: meta.tutor2_email || '',
+      tutor2Relacion: meta.tutor2_relacion || '',
+      tutor2Dni: meta.tutor2_dni || '',
+      aceptaReglamento: meta.acepta_reglamento || '',
+      aceptaRgpd: meta.acepta_rgpd || '',
+      aceptaImagen: meta.acepta_imagen || '',
     };
 
     // 1) Enviar email de confirmación automático
@@ -75,6 +90,14 @@ console.log('Webhook recibido', event.httpMethod);
                 <p style="margin:4px 0;"><strong>Importe pagado:</strong> ${cliente.importePagado}€</p>
               </div>
               <p>Nos pondremos en contacto contigo antes del inicio de curso con toda la información práctica (vestuario, punto de encuentro, etc.).</p>
+<div style="background:rgba(255,255,255,.04); border-radius:12px; padding:20px; margin:20px 0; text-align:center;">
+  <p style="margin-bottom:12px; font-size:14px;">📄 Aquí tienes una copia del Reglamento de Régimen Interno:</p>
+  <a href="https://drive.google.com/file/d/1YFlkvjvoDNfS4uCyC8qGU-zq53cAiJqa/view?usp=sharing" 
+     target="_blank"
+     style="display:inline-block; background:linear-gradient(90deg,#ff2bd6,#8a2be2); color:#fff; padding:12px 24px; border-radius:50px; text-decoration:none; font-weight:bold; font-size:14px;">
+    📥 Ver Reglamento
+  </a>
+</div>
               <p style="margin-top:24px;">¡Nos vemos en la pista! 💃🕺</p>
               <p style="color:#b9b3c9; font-size:12px; margin-top:30px;">Dicharm Dance · Sant Boi de Llobregat</p>
             </div>
@@ -89,6 +112,7 @@ console.log('Resend status:', emailRes.status, JSON.stringify(resendBody));
 
     // 2) Registrar al cliente y el pago en Google Sheets
     try {
+console.log('Enviando a Google Sheets:', process.env.GOOGLE_SHEETS_WEBHOOK_URL ? 'URL configurada' : 'URL NO configurada');
       await fetch(process.env.GOOGLE_SHEETS_WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
