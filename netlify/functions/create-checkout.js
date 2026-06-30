@@ -45,7 +45,7 @@ exports.handler = async function (event) {
         dni, fechaNacimiento,
         tutor1Nombre, tutor1Telefono, tutor1Email, tutor1Relacion, tutor1Dni,
         tutor2Nombre, tutor2Telefono, tutor2Email, tutor2Relacion, tutor2Dni,
-        aceptaReglamento, aceptaRgpd, aceptaImagen } = data;
+       aceptaReglamento, aceptaRgpd, aceptaImagen, firma } = data;
     if (!nombre || !email || !horasSemanales) {
       return {
         statusCode: 400,
@@ -97,6 +97,12 @@ exports.handler = async function (event) {
         tutor2_email:      tutor2Email || '',
         tutor2_relacion:   tutor2Relacion || '',
         tutor2_dni:        tutor2Dni || '',
+ tutor2_dni:        tutor2Dni || '',
+        acepta_reglamento: String(aceptaReglamento || false),
+        acepta_rgpd:       String(aceptaRgpd || false),
+        acepta_imagen:     String(aceptaImagen || false),
+      },
+
         acepta_reglamento: String(aceptaReglamento || false),
         acepta_rgpd:       String(aceptaRgpd || false),
         acepta_imagen:     String(aceptaImagen || false),
