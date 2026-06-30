@@ -45,7 +45,7 @@ exports.handler = async function (event) {
         dni, fechaNacimiento,
         tutor1Nombre, tutor1Telefono, tutor1Email, tutor1Relacion, tutor1Dni,
         tutor2Nombre, tutor2Telefono, tutor2Email, tutor2Relacion, tutor2Dni,
-       aceptaReglamento, aceptaRgpd, aceptaImagen, firma } = data;
+       aceptaReglamento, aceptaRgpd, aceptaImagen, firma, comoNosConocio } = data;
     if (!nombre || !email || !horasSemanales) {
       return {
         statusCode: 400,
@@ -102,6 +102,7 @@ exports.handler = async function (event) {
         acepta_rgpd:       String(aceptaRgpd || false),
         acepta_imagen:     String(aceptaImagen || false),
 firma:             firma || '',
+como_nos_conocio: comoNosConocio || '',
       },
       success_url: `${process.env.SITE_URL}/gracias.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url:  `${process.env.SITE_URL}/#inscripcion`,

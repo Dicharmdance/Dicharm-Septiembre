@@ -59,6 +59,7 @@ console.log('Webhook recibido', event.httpMethod);
       tutor2Relacion: meta.tutor2_relacion || '',
       tutor2Dni: meta.tutor2_dni || '',
 firma: meta.firma || '',
+comoNosConocio: meta.como_nos_conocio || '',
       aceptaReglamento: meta.acepta_reglamento || '',
       aceptaRgpd: meta.acepta_rgpd || '',
       aceptaImagen: meta.acepta_imagen || '',

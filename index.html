@@ -1001,6 +1001,19 @@
         <input type="text" id="f-signature" required placeholder="Firma aquí escribiendo tu nombre completo">
         <p class="signature-hint">Al escribir tu nombre y enviar este formulario, confirmas que has leído y aceptas el Reglamento de Régimen Interno y la Política de Protección de Datos, con la misma validez que una firma manuscrita.</p>
       </div>
+<div class="form-group">
+  <label>¿Cómo nos has conocido? *</label>
+  <select id="f-conocido" required>
+    <option value="">Selecciona una opción</option>
+    <option>Instagram</option>
+    <option>TikTok</option>
+    <option>Facebook</option>
+    <option>Google</option>
+    <option>Recomendación de un amigo/familiar</option>
+    <option>Cartel o flyer</option>
+    <option>Otro</option>
+  </select>
+</div>
 
       <button type="submit" class="btn btn-primary submit-btn" id="submit-btn">Reservar mi plaza — Pagar Septiembre →</button>
     </form>
@@ -1160,6 +1173,7 @@
       horasSemanales: window.dicharmState.horasSemanales,
       aceptaImagen: document.getElementById('check-imagen').checked,
       firma: document.getElementById('f-signature').value,
+      comoNosConoció: document.getElementById('f-conocido').value,
       fechaFirma: new Date().toISOString(),
 dni: document.getElementById('f-dni') ? document.getElementById('f-dni').value : '',
       fechaNacimiento: document.getElementById('f-fechanac') ? document.getElementById('f-fechanac').value : '',
