@@ -818,6 +818,91 @@
             <option>12-16 años (Youth)</option>
             <option>+17 años (Adults)</option>
           </select>
+<div class="form-group">
+  <label>Fecha de nacimiento *</label>
+  <input type="date" id="f-fechanac" required>
+</div>
+<!-- DATOS TUTOR/ES (visible solo para menores) -->
+<div id="tutor-section" style="display:none;">
+  <div style="border:1px solid rgba(138,43,226,.3); border-radius:16px; padding:24px; margin-top:8px; background:rgba(138,43,226,.05);">
+    <h3 style="font-size:16px; margin-bottom:18px; color:#fff;">👨‍👩‍👧 Datos del tutor/a legal</h3>
+    <p style="font-size:12px; color:var(--gray); margin-bottom:16px;">Al ser menor de edad, necesitamos los datos de contacto del tutor o tutores legales.</p>
+    
+    <!-- Tutor principal -->
+    <div style="margin-bottom:20px;">
+      <label style="font-size:13px; color:var(--magenta); font-weight:700; margin-bottom:10px; display:block;">TUTOR/A PRINCIPAL</label>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nombre completo *</label>
+          <input type="text" id="tutor1-nombre" placeholder="Nombre y apellidos">
+        </div>
+        <div class="form-group">
+          <label>Relación con el menor *</label>
+          <select id="tutor1-relacion">
+            <option value="">Selecciona</option>
+            <option>Padre</option>
+            <option>Madre</option>
+            <option>Tutor legal</option>
+            <option>Otro</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Teléfono *</label>
+          <input type="tel" id="tutor1-telefono" placeholder="6XX XXX XXX">
+        </div>
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" id="tutor1-email" placeholder="email@ejemplo.com">
+<div class="form-group">
+  <label>DNI / NIE del tutor principal *</label>
+  <input type="text" id="tutor1-dni" placeholder="12345678A" maxlength="10">
+</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tutor secundario -->
+    <div>
+      <label style="font-size:13px; color:var(--gray); font-weight:700; margin-bottom:10px; display:block;">TUTOR/A SECUNDARIO/A <span style="font-weight:400; font-size:11px;">(opcional)</span></label>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nombre completo</label>
+          <input type="text" id="tutor2-nombre" placeholder="Nombre y apellidos">
+        </div>
+        <div class="form-group">
+          <label>Relación con el menor</label>
+          <select id="tutor2-relacion">
+            <option value="">Selecciona</option>
+            <option>Padre</option>
+            <option>Madre</option>
+            <option>Tutor legal</option>
+            <option>Otro</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Teléfono</label>
+          <input type="tel" id="tutor2-telefono" placeholder="6XX XXX XXX">
+        </div>
+<div class="form-group">
+  <label>DNI / NIE *</label>
+  <input type="text" id="f-dni" placeholder="12345678A" maxlength="10">
+</div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="tutor2-email" placeholder="email@ejemplo.com">
+<div class="form-group">
+  <label>DNI / NIE del tutor secundario</label>
+  <input type="text" id="tutor2-dni" placeholder="12345678A" maxlength="10">
+</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
         </div>
         <div class="form-field full">
           <label>Clases seleccionadas</label>
@@ -1076,7 +1161,22 @@
       aceptaImagen: document.getElementById('check-imagen').checked,
       firma: document.getElementById('f-signature').value,
       fechaFirma: new Date().toISOString(),
+dni: document.getElementById('f-dni') ? document.getElementById('f-dni').value : '',
+      fechaNacimiento: document.getElementById('f-fechanac') ? document.getElementById('f-fechanac').value : '',
+      tutor1Dni: document.getElementById('tutor1-dni') ? document.getElementById('tutor1-dni').value : '',
+      tutor2Dni: document.getElementById('tutor2-dni') ? document.getElementById('tutor2-dni').value : '',
+      aceptaReglamento: document.getElementById('check-reglamento').checked,
+      aceptaRgpd: document.getElementById('check-rgpd').checked,
+      aceptaImagen: document.getElementById('check-imagen').checked,
       formaPago: payment,
+tutor1Nombre: document.getElementById('tutor1-nombre') ? document.getElementById('tutor1-nombre').value : '',
+      tutor1Telefono: document.getElementById('tutor1-telefono') ? document.getElementById('tutor1-telefono').value : '',
+      tutor1Email: document.getElementById('tutor1-email') ? document.getElementById('tutor1-email').value : '',
+      tutor1Relacion: document.getElementById('tutor1-relacion') ? document.getElementById('tutor1-relacion').value : '',
+      tutor2Nombre: document.getElementById('tutor2-nombre') ? document.getElementById('tutor2-nombre').value : '',
+      tutor2Telefono: document.getElementById('tutor2-telefono') ? document.getElementById('tutor2-telefono').value : '',
+      tutor2Email: document.getElementById('tutor2-email') ? document.getElementById('tutor2-email').value : '',
+      tutor2Relacion: document.getElementById('tutor2-relacion') ? document.getElementById('tutor2-relacion').value : '',
     };
 
     if(payment === 'Tarjeta (Stripe)'){
@@ -1157,7 +1257,15 @@
     {badge:'NIVEL 2', desc:'Buen manejo de la danza.', info:'Dominas el básico con soltura y encadenas varias figuras. Clases recomendadas: Bachata 2 Parejas y Salsa 2 Parejas.'},
     {badge:'NIVEL 3', desc:'Bailarín/a con experiencia.', info:'Te mueves con confianza, controlas giros y estilos propios. Clase recomendada: Salsa 3 Parejas.'},
   ];
-
+document.getElementById('f-age').addEventListener('change', function(){
+    const menor = ['3-5 años (Predanza)','6-8 años (Kids)','9-11 años (Junior)','12-16 años (Youth)'];
+    const esMenor = menor.includes(this.value);
+    document.getElementById('tutor-section').style.display = esMenor ? 'block' : 'none';
+    document.getElementById('tutor1-nombre').required = esMenor;
+    document.getElementById('tutor1-telefono').required = esMenor;
+    document.getElementById('tutor1-email').required = esMenor;
+    document.getElementById('tutor1-relacion').required = esMenor;
+  });
   function setNivel(nivel, btn){
     document.querySelectorAll('.test-opt').forEach(b=>b.classList.remove('selected'));
     btn.classList.add('selected');

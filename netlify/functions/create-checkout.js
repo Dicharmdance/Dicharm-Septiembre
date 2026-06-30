@@ -41,8 +41,11 @@ exports.handler = async function (event) {
 
   try {
     const data = JSON.parse(event.body);
-    const { nombre, email, telefono, edad, clasesSeleccionadas, horasSemanales } = data;
-
+    const { nombre, email, telefono, edad, clasesSeleccionadas, horasSemanales,
+        dni, fechaNacimiento,
+        tutor1Nombre, tutor1Telefono, tutor1Email, tutor1Relacion, tutor1Dni,
+        tutor2Nombre, tutor2Telefono, tutor2Email, tutor2Relacion, tutor2Dni,
+        aceptaReglamento, aceptaRgpd, aceptaImagen } = data;
     if (!nombre || !email || !horasSemanales) {
       return {
         statusCode: 400,
@@ -74,14 +77,29 @@ exports.handler = async function (event) {
           quantity: 1,
         },
       ],
-      metadata: {
+     metadata: {
         nombre,
-        telefono:        telefono || '',
-        edad:            edad || '',
-        clases:          clasesSeleccionadas,
-        horas_semanales: String(horasSemanales),
-        precio_base:     String(precioBase),
-        gastos_gestion:  String(gastosGestion),
+        telefono:          telefono || '',
+        edad:              edad || '',
+        clases:            clasesSeleccionadas,
+        horas_semanales:   String(horasSemanales),
+        precio_base:       String(precioBase),
+        gastos_gestion:    String(gastosGestion),
+        dni:               dni || '',
+        fecha_nacimiento:  fechaNacimiento || '',
+        tutor1_nombre:     tutor1Nombre || '',
+        tutor1_telefono:   tutor1Telefono || '',
+        tutor1_email:      tutor1Email || '',
+        tutor1_relacion:   tutor1Relacion || '',
+        tutor1_dni:        tutor1Dni || '',
+        tutor2_nombre:     tutor2Nombre || '',
+        tutor2_telefono:   tutor2Telefono || '',
+        tutor2_email:      tutor2Email || '',
+        tutor2_relacion:   tutor2Relacion || '',
+        tutor2_dni:        tutor2Dni || '',
+        acepta_reglamento: String(aceptaReglamento || false),
+        acepta_rgpd:       String(aceptaRgpd || false),
+        acepta_imagen:     String(aceptaImagen || false),
       },
       success_url: `${process.env.SITE_URL}/gracias.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url:  `${process.env.SITE_URL}/#inscripcion`,
