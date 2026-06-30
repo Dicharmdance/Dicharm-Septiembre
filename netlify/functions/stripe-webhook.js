@@ -113,11 +113,13 @@ console.log('Resend status:', emailRes.status, JSON.stringify(resendBody));
     // 2) Registrar al cliente y el pago en Google Sheets
     try {
 console.log('Enviando a Google Sheets:', process.env.GOOGLE_SHEETS_WEBHOOK_URL ? 'URL configurada' : 'URL NO configurada');
-      await fetch(process.env.GOOGLE_SHEETS_WEBHOOK_URL, {
+            const sheetsRes = await fetch(process.env.GOOGLE_SHEETS_WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tipo: 'nueva_inscripcion', datos: cliente }),
       });
+      const sheetsBody = await sheetsRes.text();
+      console.log('Google Sheets response:', sheetsRes.status, sheetsBody);
     } catch (err) {
       console.error('Error registrando en Google Sheets:', err);
     }
