@@ -1074,10 +1074,10 @@
     el.nextElementSibling.classList.toggle('open');
   }
 
-  function toggleClass(row){
+ function toggleClass(row){
     const checkbox = row.querySelector('input[type=checkbox]');
-    checkbox.checked = !checkbox.checked;
     row.classList.toggle('selected');
+    checkbox.checked = row.classList.contains('selected');
     updateSummary();
   }
 
