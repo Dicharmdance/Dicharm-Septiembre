@@ -548,15 +548,48 @@
 <!-- ========== PRECIOS ========== -->
 <section id="precios">
   <h2 class="section-title">Precios <span class="gradient-text">Transparentes</span></h2>
-  <p class="section-sub">Sin letra pequeña. Sin matrícula. Sin permanencia.</p>
+  <p class="section-sub">Sin letra pequeña. Sin permanencia. Solo para alumnos nuevos.</p>
+  
+  <div style="text-align:center; margin-bottom:36px;">
+    <div style="display:inline-block; background:linear-gradient(90deg,#ff2bd6,#8a2be2); border-radius:50px; padding:12px 32px; margin-bottom:12px;">
+      <span style="color:#fff; font-size:15px; font-weight:700;">🎉 PROMOCIÓN DE APERTURA — Solo nuevos alumnos</span>
+    </div>
+    <p style="color:#b9b3c9; font-size:14px;">Matrícula gratis (valor 40€) + 35% de descuento en tu primer mes</p>
+  </div>
+
   <div style="display:flex; flex-wrap:wrap; gap:24px; justify-content:center; max-width:900px; margin:0 auto;">
 
     <div style="flex:1; min-width:220px; max-width:280px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); border-radius:20px; padding:32px 24px; text-align:center;">
-      <div style="font-size:40px; font-weight:900; background:linear-gradient(90deg,#ff2bd6,#8a2be2); -webkit-background-clip:text; background-clip:text; color:transparent;">35€</div>
-      <div style="font-size:13px; color:#b9b3c9; margin-bottom:4px;">/mes</div>
-      <div style="font-size:16px; font-weight:700; margin-bottom:16px;">1 hora/semana</div>
+      <div style="font-size:14px; color:#b9b3c9; text-decoration:line-through; margin-bottom:2px;">35€/mes</div>
+      <div style="font-size:40px; font-weight:900; background:linear-gradient(90deg,#ff2bd6,#8a2be2); -webkit-background-clip:text; background-clip:text; color:transparent;">24,50€</div>
+      <div style="font-size:13px; color:#ff2bd6; margin-bottom:4px; font-weight:600;">primer mes</div>
+      <div style="font-size:16px; font-weight:700; margin-bottom:8px;">1 hora/semana</div>
+      <div style="font-size:13px; color:#b9b3c9; margin-bottom:4px;">Desde el 2º mes: 35€/mes</div>
       <div style="font-size:13px; color:#b9b3c9;">1 clase semanal de tu elección</div>
     </div>
+
+    <div style="flex:1; min-width:220px; max-width:280px; background:linear-gradient(135deg,rgba(138,43,226,.2),rgba(255,43,214,.1)); border:2px solid #ff2bd6; border-radius:20px; padding:32px 24px; text-align:center; position:relative;">
+      <div style="position:absolute; top:-14px; left:50%; transform:translateX(-50%); background:linear-gradient(90deg,#ff2bd6,#8a2be2); color:#fff; font-size:12px; font-weight:700; padding:4px 16px; border-radius:50px;">MÁS POPULAR</div>
+      <div style="font-size:14px; color:#b9b3c9; text-decoration:line-through; margin-bottom:2px;">60€/mes</div>
+      <div style="font-size:40px; font-weight:900; background:linear-gradient(90deg,#ff2bd6,#8a2be2); -webkit-background-clip:text; background-clip:text; color:transparent;">47€</div>
+      <div style="font-size:13px; color:#ff2bd6; margin-bottom:4px; font-weight:600;">primer mes</div>
+      <div style="font-size:16px; font-weight:700; margin-bottom:8px;">2 horas/semana</div>
+      <div style="font-size:13px; color:#b9b3c9; margin-bottom:4px;">Desde el 2º mes: 60€/mes</div>
+      <div style="font-size:13px; color:#b9b3c9;">2 clases semanales de tu elección</div>
+    </div>
+
+    <div style="flex:1; min-width:220px; max-width:280px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); border-radius:20px; padding:32px 24px; text-align:center;">
+      <div style="font-size:14px; color:#b9b3c9; text-decoration:line-through; margin-bottom:2px;">80€/mes</div>
+      <div style="font-size:40px; font-weight:900; background:linear-gradient(90deg,#ff2bd6,#8a2be2); -webkit-background-clip:text; background-clip:text; color:transparent;">67€</div>
+      <div style="font-size:13px; color:#ff2bd6; margin-bottom:4px; font-weight:600;">primer mes</div>
+      <div style="font-size:16px; font-weight:700; margin-bottom:8px;">3 horas/semana</div>
+      <div style="font-size:13px; color:#b9b3c9; margin-bottom:4px;">Desde el 2º mes: 80€/mes</div>
+      <div style="font-size:13px; color:#b9b3c9;">3 clases semanales de tu elección</div>
+    </div>
+
+  </div>
+  <p style="text-align:center; margin-top:32px; font-size:14px; color:#ff2bd6; font-weight:700;">🎓 Matrícula GRATIS (valor 40€) · Promoción válida hasta el 31 de agosto · Solo nuevos alumnos</p>
+</section>
 
     <div style="flex:1; min-width:220px; max-width:280px; background:linear-gradient(135deg,rgba(138,43,226,.2),rgba(255,43,214,.1)); border:2px solid #ff2bd6; border-radius:20px; padding:32px 24px; text-align:center; position:relative;">
       <div style="position:absolute; top:-14px; left:50%; transform:translateX(-50%); background:linear-gradient(90deg,#ff2bd6,#8a2be2); color:#fff; font-size:12px; font-weight:700; padding:4px 16px; border-radius:50px;">MÁS POPULAR</div>
@@ -1117,16 +1150,19 @@ document.getElementById('dias-num').textContent = days;
     updateSummary();
   }
 
-  // Tabla de precios actualizada: 1h=35€, 2h=60€, 3h=80€, +1h=+20€
+// Precios base: 1h=35€, 2h=60€, 3h=80€, +1h=+20€
+  // Descuento primer mes (solo nuevos alumnos):
+  // 30% sobre la 1ª hora (35€) = 10,50€
+  // 10% sobre la 2ª hora (25€) = 2,50€
   function calcularPrecioBase(horas){
     if(horas <= 0) return 0;
-    if(horas === 1) return 35;
-    if(horas === 2) return 60;
-    if(horas === 3) return 80;
-    return 80 + (horas - 3) * 20;
-  }
-
-  // Stripe: 1.5% + 0.25€ (el total al cliente debe cubrir los gastos)
+    const descuento1h = 35 * 0.30;        // 10,50€
+    const descuento2h = 25 * 0.10;        // 2,50€
+    if(horas === 1) return 35 - descuento1h;                    // 24,50€
+    if(horas === 2) return 60 - descuento1h - descuento2h;     // 47€
+    if(horas === 3) return 80 - descuento1h - descuento2h;     // 67€
+    return 80 + (horas - 3) * 20 - descuento1h - descuento2h;
+  }  // Stripe: 1.5% + 0.25€ (el total al cliente debe cubrir los gastos)
   // Formula: total = (base + 0.25) / (1 - 0.015)
   function calcularTotalConStripe(base){
     if(base <= 0) return 0;
