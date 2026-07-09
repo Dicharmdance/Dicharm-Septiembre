@@ -19,10 +19,10 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 // Tabla de precios (mensualidad según horas/semana)
 function calcularPrecioBase(horasSemanales) {
   if (horasSemanales <= 0) return 0;
-  if (horasSemanales === 1) return 35;
-  if (horasSemanales === 2) return 60;
-  if (horasSemanales === 3) return 80;
-  // Más de 3h/semana: 80€ + 20€ por cada hora adicional
+  if (horasSemanales === 1) return 24,50;
+  if (horasSemanales === 2) return 47;
+  if (horasSemanales === 3) return 67;
+  // Más de 3h/semana: 67€ + 20€ por cada hora adicional
   return 80 + (horasSemanales - 3) * 20;
 }
 
