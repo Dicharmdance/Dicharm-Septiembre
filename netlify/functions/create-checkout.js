@@ -23,7 +23,7 @@ function calcularPrecioBase(horasSemanales) {
   if (horasSemanales === 2) return 47;
   if (horasSemanales === 3) return 67;
   // Más de 3h/semana: 67€ + 20€ por cada hora adicional
-  return 80 + (horasSemanales - 3) * 20;
+  return 67 + (horasSemanales - 3) * 20;
 }
 
 // Fórmula correcta de Stripe: el cliente paga lo justo para que,
