@@ -21,7 +21,8 @@ exports.handler = async function (event) {
 
     // 1) Registrar en Google Sheets
     try {
-      await fetch(process.env.GOOGLE_SHEETS_WEBHOOK_URL, {
+     console.log('Enviando a Sheets:', process.env.GOOGLE_SHEETS_WEBHOOK_URL ? 'URL ok' : 'URL no configurada');
+ await fetch(process.env.GOOGLE_SHEETS_WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
