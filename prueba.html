@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reserva tu clase de prueba — Dicharm Dance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    :root{--purple:#8a2be2;--magenta:#ff2bd6;--blue:#1e6bff;--black:#06030f;--black2:#0e0a16;--gray:#b9b3c9;}
+    body{background:var(--black); color:#fff; font-family:'Poppins',sans-serif; min-height:100vh;}
+    nav{display:flex;align-items:center;justify-content:space-between;padding:18px 6%;background:rgba(6,3,15,.95);position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,255,255,.07);}
+    nav .logo-wrap{display:flex;align-items:center;gap:12px;text-decoration:none;}
+    nav .logo-wrap img{height:60px;width:auto;object-fit:contain;}
+    .hero{text-align:center;padding:80px 6% 60px;background:linear-gradient(135deg,rgba(138,43,226,.15),rgba(255,43,214,.05));}
+    .hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,6vw,64px);letter-spacing:2px;margin-bottom:16px;}
+    .hero p{color:var(--gray);font-size:16px;max-width:500px;margin:0 auto 8px;}
+    .badge{display:inline-block;background:linear-gradient(90deg,var(--magenta),var(--purple));border-radius:50px;padding:8px 24px;font-size:13px;font-weight:700;margin-bottom:32px;}
+    .form-wrap{max-width:600px;margin:0 auto;padding:0 6% 80px;}
+    .form-card{background:var(--black2);border:1px solid rgba(138,43,226,.3);border-radius:24px;padding:40px;}
+    .form-group{margin-bottom:20px;}
+    label{display:block;font-size:13px;font-weight:600;margin-bottom:8px;color:var(--gray);}
+    input,select{width:100%;padding:14px 16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;color:#fff;font-family:'Poppins',sans-serif;font-size:14px;outline:none;transition:border-color .2s;}
+    input:focus,select:focus{border-color:var(--purple);}
+    select option{background:#1a0a2e;color:#fff;}
+    .btn{width:100%;padding:18px;background:linear-gradient(90deg,var(--magenta),var(--purple));border:none;border-radius:14px;color:#fff;font-family:'Poppins',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:opacity .2s;margin-top:8px;}
+    .btn:hover{opacity:.9;}
+    .btn:disabled{opacity:.5;cursor:not-allowed;}
+    .check-row{display:flex;align-items:flex-start;gap:12px;margin-bottom:20px;}
+    .check-row input[type=checkbox]{width:20px;height:20px;accent-color:var(--magenta);flex-shrink:0;margin-top:2px;}
+    .check-row label{font-size:12px;color:var(--gray);margin:0;}
+    .check-row a{color:var(--magenta);}
+    .success-msg{display:none;text-align:center;padding:40px 20px;}
+    .success-msg .icon{font-size:60px;margin-bottom:16px;}
+    .success-msg h2{font-family:'Bebas Neue',sans-serif;font-size:36px;margin-bottom:12px;background:linear-gradient(90deg,var(--magenta),var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent;}
+    .success-msg p{color:var(--gray);font-size:14px;}
+    footer{text-align:center;padding:30px;border-top:1px solid rgba(255,255,255,.07);color:var(--gray);font-size:13px;}
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo-wrap">
+    <img src="https://dicharmdance-inscripciones.netlify.app/logo.png" alt="Dicharm Dance" onerror="this.style.display='none'">
+  </a>
+  <a href="index.html" style="color:var(--gray);font-size:13px;text-decoration:none;">← Volver a inscripciones</a>
+</nav>
+
+<div class="hero">
+  <div class="badge">🎓 CLASE DE PRUEBA GRATUITA</div>
+  <h1>Prueba antes de <span style="background:linear-gradient(90deg,#ff2bd6,#8a2be2);-webkit-background-clip:text;background-clip:text;color:transparent;">comprometerte</span></h1>
+  <p>Rellena el formulario y nos ponemos en contacto contigo para confirmar el día y hora.</p>
+  <p style="font-size:13px;margin-top:8px;">Sin pago. Sin compromiso. Solo una clase.</p>
+</div>
+
+<div class="form-wrap">
+  <div class="form-card">
+    <div id="form-content">
+      <form id="trial-form">
+
+        <div class="form-group">
+          <label>Nombre completo *</label>
+          <input type="text" id="t-name" placeholder="Tu nombre y apellidos" required>
+        </div>
+
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" id="t-email" placeholder="tu@email.com" required>
+        </div>
+
+        <div class="form-group">
+          <label>Teléfono</label>
+          <input type="tel" id="t-phone" placeholder="6XX XXX XXX">
+        </div>
+
+        <div class="form-group">
+          <label>Clase que quieres probar *</label>
+          <select id="t-clase" required>
+            <option value="">Selecciona una clase</option>
+            <optgroup label="── DANZAS URBANAS ──">
+              <option>Predanza · Lunes y miércoles 17:30-18:30</option>
+              <option>Urbanos Kids · Martes y jueves 17:30-18:30</option>
+              <option>Urbanos Junior · Martes y jueves 18:30-19:30</option>
+              <option>Urban Youth · Lunes y miércoles 18:30-19:30</option>
+              <option>Urban Adults · Viernes 18:30-19:30</option>
+            </optgroup>
+            <optgroup label="── LATINOS PAREJAS ──">
+              <option>Bachata 0 Parejas · Jueves 19:30-20:30</option>
+              <option>Bachata 1 Parejas · Lunes 19:30-20:30</option>
+              <option>Bachata 1 Parejas (noche) · Lunes 21:30-22:30</option>
+              <option>Bachata 2 Parejas · Miércoles 20:30-21:30</option>
+              <option>Salsa 0 Parejas · Jueves 20:30-21:30</option>
+              <option>Salsa 1 Parejas · Lunes 20:30-21:30</option>
+              <option>Salsa 2 Parejas · Miércoles 19:30-20:30</option>
+              <option>Salsa 3 Parejas · Miércoles 21:30-22:30</option>
+            </optgroup>
+            <optgroup label="── LATINOS ESTILO ──">
+              <option>Salsa Estilo 1 · Martes 19:30</option>
+              <option>Salsa Estilo 2 · Martes 21:30</option>
+              <option>Salsa Estilo Mañana · Martes 11:00</option>
+              <option>Bachata Estilo 1 · Martes 20:30</option>
+              <option>Bachata Estilo Mañana · Martes 12:00</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>¿Cómo nos has conocido?</label>
+          <select id="t-conocido">
+            <option value="">Selecciona una opción</option>
+            <option>Instagram</option>
+            <option>TikTok</option>
+            <option>Facebook</option>
+            <option>Google</option>
+            <option>Recomendación de un amigo/familiar</option>
+            <option>Cartel o flyer</option>
+            <option>Otro</option>
+          </select>
+        </div>
+
+        <!-- Honeypot anti-spam -->
+        <input type="text" id="t-honey" style="display:none;" tabindex="-1" autocomplete="off">
+
+        <div class="check-row">
+          <input type="checkbox" id="t-rgpd" required>
+          <label for="t-rgpd">He leído y acepto la <a href="#" target="_blank">Política de Privacidad</a>. Mis datos serán usados únicamente para gestionar mi reserva.</label>
+        </div>
+
+        <button type="submit" class="btn" id="t-submit">Reservar mi clase de prueba →</button>
+      </form>
+    </div>
+
+    <div class="success-msg" id="success-msg">
+      <div class="icon">🎉</div>
+      <h2>¡Reserva recibida!</h2>
+      <p>En breve nos pondremos en contacto contigo para confirmar el día y hora.</p>
+      <p style="margin-top:12px;">¿Tienes dudas? Escríbenos a <strong>dicharmdance@gmail.com</strong> o al <strong>614 028 688</strong>.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Dicharm Dance · Carrer d'Eusebi Güell 43, Sant Boi de Llobregat · dicharmdance@gmail.com
+</footer>
+
+<script>
+  document.getElementById('trial-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    // Anti-spam honeypot
+    if (document.getElementById('t-honey').value) return;
+
+    const btn = document.getElementById('t-submit');
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+
+    const datos = {
+      nombre:        document.getElementById('t-name').value.trim(),
+      email:         document.getElementById('t-email').value.trim(),
+      telefono:      document.getElementById('t-phone').value.trim(),
+      clase:         document.getElementById('t-clase').value,
+      comoNosConocio: document.getElementById('t-conocido').value,
+    };
+
+    try {
+      const res = await fetch('/.netlify/functions/reserve-trial', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos),
+      });
+      const result = await res.json();
+
+      if (result.ok) {
+        document.getElementById('form-content').style.display = 'none';
+        document.getElementById('success-msg').style.display = 'block';
+      } else {
+        alert('Hubo un problema. Por favor contáctanos directamente.');
+        btn.disabled = false;
+        btn.textContent = 'Reservar mi clase de prueba →';
+      }
+    } catch (err) {
+      alert('Error de conexión. Por favor contáctanos directamente.');
+      btn.disabled = false;
+      btn.textContent = 'Reservar mi clase de prueba →';
+    }
+  });
+</script>
+
+</body>
+</html>
