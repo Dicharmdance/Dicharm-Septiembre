@@ -34,8 +34,7 @@ exports.handler = async function (event) {
 
     // 1) Registrar en Google Sheets
     try {
-      console.log('Sheets URL:', process.env.GOOGLE_SHEETS_WEBHOOK_URL ? 'ok' : 'no configurada');
-      const sheetsRes = await fetch(process.env.GOOGLE_SHEETS_WEBHOOK_URL, {
+      await fetch(process.env.GOOGLE_SHEETS_WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -48,9 +47,6 @@ exports.handler = async function (event) {
             fechaFirma,
           },
         }),
-      });
-      const sheetsBody = await sheetsRes.text();
-      console.log('Sheets response:', sheetsRes.status, sheetsBody);
       });
     } catch (err) {
       console.error('Error registrando en Google Sheets:', err);
