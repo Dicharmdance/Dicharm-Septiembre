@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matrícula Open Day — Dicharm Dance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    :root{--purple:#8a2be2;--magenta:#ff2bd6;--blue:#1e6bff;--black:#06030f;--black2:#0e0a16;--gray:#b9b3c9;}
+    body{background:var(--black);color:#fff;font-family:'Poppins',sans-serif;min-height:100vh;}
+    nav{display:flex;align-items:center;justify-content:space-between;padding:18px 6%;background:rgba(6,3,15,.95);position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,255,255,.07);}
+    nav .logo-wrap{display:flex;align-items:center;gap:12px;text-decoration:none;}
+    nav .logo-wrap img{height:60px;width:auto;object-fit:contain;}
+    .hero{text-align:center;padding:80px 6% 60px;background:linear-gradient(135deg,rgba(138,43,226,.15),rgba(255,43,214,.05));}
+    .hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,6vw,64px);letter-spacing:2px;margin-bottom:16px;}
+    .hero p{color:var(--gray);font-size:16px;max-width:500px;margin:0 auto 8px;}
+    .badge{display:inline-block;background:linear-gradient(90deg,var(--magenta),var(--purple));border-radius:50px;padding:8px 24px;font-size:13px;font-weight:700;margin-bottom:32px;}
+    .form-wrap{max-width:700px;margin:0 auto;padding:0 6% 80px;}
+    .form-card{background:var(--black2);border:1px solid rgba(138,43,226,.3);border-radius:24px;padding:40px;}
+    .form-group{margin-bottom:20px;}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    @media(max-width:600px){.form-row{grid-template-columns:1fr;}}
+    label{display:block;font-size:13px;font-weight:600;margin-bottom:8px;color:var(--gray);}
+    input,select{width:100%;padding:14px 16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;color:#fff;font-family:'Poppins',sans-serif;font-size:14px;outline:none;transition:border-color .2s;}
+    input:focus,select:focus{border-color:var(--purple);}
+    select option{background:#1a0a2e;color:#fff;}
+    .section-title-sm{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;color:var(--magenta);margin:28px 0 16px;}
+    .tutor-section{display:none;background:rgba(138,43,226,.05);border:1px solid rgba(138,43,226,.2);border-radius:16px;padding:24px;margin-bottom:20px;}
+    .tutor-label{font-size:13px;color:var(--magenta);font-weight:700;margin-bottom:12px;}
+    .check-row{display:flex;align-items:flex-start;gap:12px;margin-bottom:16px;}
+    .check-row input[type=checkbox]{width:20px;height:20px;accent-color:var(--magenta);flex-shrink:0;margin-top:2px;}
+    .check-row label{font-size:12px;color:var(--gray);margin:0;}
+    .check-row a{color:var(--magenta);}
+    .signature-box{border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 16px;background:rgba(255,255,255,.05);}
+    .signature-hint{font-size:11px;color:var(--gray);margin-top:6px;}
+    .btn{width:100%;padding:18px;background:linear-gradient(90deg,var(--magenta),var(--purple));border:none;border-radius:14px;color:#fff;font-family:'Poppins',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:opacity .2s;margin-top:8px;}
+    .btn:hover{opacity:.9;}
+    .btn:disabled{opacity:.5;cursor:not-allowed;}
+    .class-row{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-radius:12px;margin-bottom:8px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);cursor:pointer;transition:background .2s,border-color .2s;}
+    .class-row:hover{background:rgba(255,255,255,.06);}
+    .class-row.selected{border-color:var(--magenta);background:rgba(255,43,214,.08);}
+    .class-row .info{display:flex;align-items:center;gap:14px;}
+    .class-row input[type=checkbox]{width:20px;height:20px;accent-color:var(--magenta);cursor:pointer;}
+    .class-row .name{font-weight:600;font-size:15px;}
+    .class-row .meta{font-size:12.5px;color:var(--gray);}
+    .accordion{margin-bottom:12px;}
+    .accordion-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;cursor:pointer;font-weight:600;font-size:15px;}
+    .accordion-header:hover{background:rgba(255,255,255,.07);}
+    .accordion-body{display:none;padding:12px 0 4px;}
+    .accordion-body.open{display:block;}
+    .hours-badge{background:rgba(138,43,226,.2);color:var(--purple);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700;}
+    .success-msg{display:none;text-align:center;padding:40px 20px;}
+    .success-msg .icon{font-size:60px;margin-bottom:16px;}
+    .success-msg h2{font-family:'Bebas Neue',sans-serif;font-size:36px;margin-bottom:12px;background:linear-gradient(90deg,var(--magenta),var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent;}
+    .success-msg p{color:var(--gray);font-size:14px;}
+    footer{text-align:center;padding:30px;border-top:1px solid rgba(255,255,255,.07);color:var(--gray);font-size:13px;}
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo-wrap">
+    <img src="https://dicharmdance-inscripciones.netlify.app/logo.png" alt="Dicharm Dance" onerror="this.style.display='none'">
+  </a>
+  <a href="index.html" style="color:var(--gray);font-size:13px;text-decoration:none;">← Volver</a>
+</nav>
+
+<div class="hero">
+  <div class="badge">🎉 MATRÍCULA OPEN DAY</div>
+  <h1>¡Bienvenido/a a <span style="background:linear-gradient(90deg,#ff2bd6,#8a2be2);-webkit-background-clip:text;background-clip:text;color:transparent;">Dicharm Dance</span>!</h1>
+  <p>Completa tu matrícula. Recibirás una confirmación por email con toda la información.</p>
+</div>
+
+<div class="form-wrap">
+  <div class="form-card">
+    <div id="form-content">
+      <form id="openday-form">
+
+        <!-- DATOS PERSONALES -->
+        <div class="section-title-sm">👤 Datos personales</div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombre completo *</label>
+            <input type="text" id="od-name" required placeholder="Nombre y apellidos">
+          </div>
+          <div class="form-group">
+            <label>Email *</label>
+            <input type="email" id="od-email" required placeholder="tu@email.com">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Teléfono *</label>
+            <input type="tel" id="od-phone" required placeholder="6XX XXX XXX">
+          </div>
+          <div class="form-group">
+            <label>DNI / NIE *</label>
+            <input type="text" id="od-dni" required placeholder="12345678A" maxlength="10">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Fecha de nacimiento *</label>
+            <input type="date" id="od-fechanac" required>
+          </div>
+          <div class="form-group">
+            <label>Categoría de edad *</label>
+            <select id="od-age" required>
+              <option value="">Selecciona</option>
+              <option>3-5 años (Predanza)</option>
+              <option>6-8 años (Kids)</option>
+              <option>9-11 años (Junior)</option>
+              <option>12-16 años (Youth)</option>
+              <option>+17 años (Adults)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- DATOS TUTORES (menores) -->
+        <div class="tutor-section" id="od-tutor-section">
+          <div class="tutor-label">👨‍👩‍👧 TUTOR/A PRINCIPAL</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nombre completo *</label>
+              <input type="text" id="od-t1-nombre" placeholder="Nombre y apellidos">
+            </div>
+            <div class="form-group">
+              <label>Relación *</label>
+              <select id="od-t1-relacion">
+                <option value="">Selecciona</option>
+                <option>Padre</option><option>Madre</option>
+                <option>Tutor legal</option><option>Otro</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Teléfono *</label>
+              <input type="tel" id="od-t1-tel" placeholder="6XX XXX XXX">
+            </div>
+            <div class="form-group">
+              <label>Email *</label>
+              <input type="email" id="od-t1-email" placeholder="email@ejemplo.com">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>DNI / NIE *</label>
+            <input type="text" id="od-t1-dni" placeholder="12345678A" maxlength="10">
+          </div>
+
+          <div class="tutor-label" style="margin-top:20px;">TUTOR/A SECUNDARIO/A <span style="font-weight:400;font-size:11px;">(opcional)</span></div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nombre completo</label>
+              <input type="text" id="od-t2-nombre" placeholder="Nombre y apellidos">
+            </div>
+            <div class="form-group">
+              <label>Relación</label>
+              <select id="od-t2-relacion">
+                <option value="">Selecciona</option>
+                <option>Padre</option><option>Madre</option>
+                <option>Tutor legal</option><option>Otro</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Teléfono</label>
+              <input type="tel" id="od-t2-tel" placeholder="6XX XXX XXX">
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" id="od-t2-email" placeholder="email@ejemplo.com">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>DNI / NIE</label>
+            <input type="text" id="od-t2-dni" placeholder="12345678A" maxlength="10">
+          </div>
+        </div>
+
+        <!-- CLASES -->
+        <div class="section-title-sm">💃 Clases seleccionadas</div>
+
+        <div class="accordion">
+          <div class="accordion-header" onclick="toggleAccordion(this)">🕺 Danzas Urbanas <span>▼</span></div>
+          <div class="accordion-body">
+            <div class="class-row" data-hours="2" data-name="Predanza (3-5 años)" onclick="toggleClass(this)">
+              <div class="info"><input type="checkbox" onclick="event.stopPropagation();toggleClass(this.closest('.class-row'))"><div><div class="name">Predanza</div><div class="meta">3-5 años · Lunes y miércoles 17:30-18:30</div></div></div>
+              <span class="hours-badge">2h/sem</span>
+            </div>
+            <div class="class-row" data-hours="2" data-name="Urbanos Kids (6-8 años)" onclick="toggleClass(this)">
+              <div class="info"><input type="checkbox" onclick="event.stopPropagation();toggleClass(this.closest('.class-row'))"><div><div class="name">Urbanos Kids</div><div class="meta">6-8 años · Martes y jueves 17:30-18:30</div></div></div>
+              <span class="hours-badge">2h/sem</span>
+            </div>
+            <div class="class-row" data-hours="2" data-name="Urbanos Junior (9-11 años)" onclick="toggleClass(this)">
+              <div class="info"><input type="checkbox" onclick="event.stopPropagation();toggleClass(this.closest('.class-row'))"><div><div class="name">Urbanos Junior</div><div class="meta">9-11 años · Martes y jueves 18:30-19:30</div></div></div>
+              <span class="hours-badge">2h/sem</span>
+            </div>
+            <div class="class-row" data-hours="2" data-name="Urban Youth (12-16 años)" onclick="toggleClass(this)">
+              <div class="info"><input type="checkbox" onclick="event.stopPropagation();toggleClass(this.closest('.class-row'))"><div><div class="name">Urban Youth</div><div class="meta">12-16 años · Lunes y miércoles 18:30-19:30</div></div></div>
+              <span class="hours-badge">2h/sem</span>
+            </div>
+            <div class="class-row" data-hours="1" data-name="Urban Adults (+17 años)" onclick="toggleClass(this)">
+              <div class="info"><input type="checkbox" onclick="event.stopPropagation();toggleClass(this.closest('.class-row'))"><div><div class="name">Urban Adults</div><div class="meta">+17 años · Viernes 18:30-19:30</div></div></div>
+              <span class="hours-badge">1h/sem</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion">
+          <div class="accordion-header" onclick="toggleAccordion(this)">💃 Latinos Parejas <span>▼</span></div>
+          <div class="accordion-body">
+            <div class="class-row" data-hours="1" data-name="Bachata 0 Parejas" onclick="toggleClass(this)">
+              <div class="info"><input type="checkbox" onclick="event.stopPropagation();toggleClass(this.closest('.class-row'))"><div><div class="name">Bachata 0 Parejas</div><div class="meta">Jueves 19:30-20:30</div></div></div>
+              <span class="hours-badge">1h/sem</span>
+            </div>
+            <div class="class-row" data-hours="1" data-name="Bachata 1 Parejas" onclick="toggleClass(this)">
+              <div class="info"><input type="checkbox" onclick="event.stopPropagation();toggleClass(this.closest('.class-row'))"><div><div class="name">Bachata 1 Parejas</div><div class="meta">Lunes 19:30-20:30</div></div></div>
+              <span class="hours-badge">1h/sem</span>
+            </div>
+            <div class="class-row" data-hours="1" data-name="Bachata 1 Parejas (noche)" onclick="toggleClass(this)">
+              <div class="info"><input type="checkbox" onclick="event.stopPropagation();toggleClass(this.closest('.class-row'))"><div><div class="name">Bachata 1 Parejas (noche)</div><div class="meta">Lunes 21:30-22:30</div></div></div>
+              <span class="hours-badge">1h/sem</span>
+            </div>
+            <div class="class-row" data-hours="1" data-name="Bachata 2 Parejas" onclick="toggleClass(this)">
+              <div class="info"><input type="checkbox" onclick="event.stopPropagation();toggleClass(this.closest('.class-row'))"><div><div class="name">Bachata 2 Parejas</div><div class="meta">Miércoles 20:30-21:30</div></div></div>
+              <span class="hours-badge">1h/sem</span>
+            </div>
+            <div class="class-row" data-hours="1" data-name="Salsa 0 Parejas" onclick="toggleClass(this)">
+              <div class="info"><input type="checkbox" onclick="event.stopPropagation();toggleClass(this.closest('.class-row'))"><div><div class="name">Salsa 0 Parejas</div><div class="meta">Jueves 20:30-21:30</div></div></div>
+              <span class="hours-badge">1h/sem</span>
+            </div>
+            <div class="class-row" data-hours="1" data-name="Salsa 1 Parejas" onclick="toggleClass(this)">
+              <div class="info"><input type="checkbox" onclick="event.stopPropagation();toggleClass(this.closest('.class-row'))"><div><div class="name">Salsa 1 Parejas</div><div class="meta">Lunes 20:30-21:30</div></div></div>
+              <span class="hours-badge">1h/sem</span>
+            </div>
+            <div class="class-row" data-hours="1" data-name="Salsa 2 Parejas" onclick="toggleClass(this)">
+              <div class="info"><input type="checkbox" onclick="event.stopPropagation();toggleClass(this.closest('.class-row'))"><div><div class="name">Salsa 2 Parejas</div><div class="meta">Miércoles 19:30-20:30</div></div></div>
+              <span class="hours-badge">1h/sem</span>
+            </div>
+            <div class="class-row" data-hours="1" data-name="Salsa 3 Parejas" onclick="toggleClass(this)">
+              <div class="info"><input type="checkbox" onclick="event.stopPropagation();toggleClass(this.closest('.class-row'))"><div><div class="name">Salsa 3 Parejas</div><div class="meta">Miércoles 21:30-22:30</div></div></div>
+              <span class="hours-badge">1h/sem</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion">
+          <div class="accordion-header" onclick="toggleAccordion(this)">✨ Latinos Estilo <span>▼</span></div>
+          <div class="accordion-body">
+            <div class="class-row" data-hours="1" data-name="Salsa Estilo Chica 1" onclick="toggleClass(this)">
+              <div class="info"><input type="checkbox" onclick="event.stopPropagation();toggleClass(this.closest('.class-row'))"><div><div class="name">Salsa Estilo Chica 1</div><div class="meta">Martes 19:30</div></div></div>
+              <span class="hours-badge">1h/sem</span>
+            </div>
+            <div class="class-row" data-hours="1" data-name="Salsa Estilo Chica 2" onclick="toggleClass(this)">
+              <div class="info"><input type="checkbox" onclick="event.stopPropagation();toggleClass(this.closest('.class-row'))"><div><div class="name">Salsa Estilo Chica 2</div><div class="meta">Martes 21:30</div></div></div>
+              <span class="hours-badge">1h/sem</span>
+            </div>
+            <div class="class-row" data-hours="1" data-name="Salsa Estilo Mañana" onclick="toggleClass(this)">
+              <div class="info"><input type="checkbox" onclick="event.stopPropagation();toggleClass(this.closest('.class-row'))"><div><div class="name">Salsa Estilo Mañana</div><div class="meta">Martes 11:00</div></div></div>
+              <span class="hours-badge">1h/sem</span>
+            </div>
+            <div class="class-row" data-hours="1" data-name="Bachata Estilo Chica 1" onclick="toggleClass(this)">
+              <div class="info"><input type="checkbox" onclick="event.stopPropagation();toggleClass(this.closest('.class-row'))"><div><div class="name">Bachata Estilo Chica 1</div><div class="meta">Martes 20:30</div></div></div>
+              <span class="hours-badge">1h/sem</span>
+            </div>
+            <div class="class-row" data-hours="1" data-name="Bachata Estilo Mañana" onclick="toggleClass(this)">
+              <div class="info"><input type="checkbox" onclick="event.stopPropagation();toggleClass(this.closest('.class-row'))"><div><div class="name">Bachata Estilo Mañana</div><div class="meta">Martes 12:00</div></div></div>
+              <span class="hours-badge">1h/sem</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONSENTIMIENTOS -->
+        <div class="section-title-sm">📋 Consentimientos</div>
+
+        <div class="check-row">
+          <input type="checkbox" id="od-reglamento" required>
+          <label for="od-reglamento">He leído y acepto el <a href="https://drive.google.com/file/d/1YFlkvjvoDNfS4uCyC8qGU-zq53cAiJqa/view?usp=sharing" target="_blank">Reglamento de Régimen Interno</a> de Dicharm Dance. *</label>
+        </div>
+
+        <div class="check-row">
+          <input type="checkbox" id="od-rgpd" required>
+          <label for="od-rgpd">He leído y acepto la Política de Protección de Datos. Mis datos serán tratados conforme al RGPD. *</label>
+        </div>
+
+        <div class="check-row">
+          <input type="checkbox" id="od-imagen">
+          <label for="od-imagen">Consiento el uso de mi imagen (o la de mi tutorizado/a) con fines promocionales de la escuela. (Opcional)</label>
+        </div>
+
+        <!-- FIRMA -->
+        <div class="section-title-sm">✍️ Firma digital</div>
+        <div class="form-group">
+          <div class="signature-box">
+            <input type="text" id="od-firma" required placeholder="Escribe tu nombre completo como firma">
+          </div>
+          <p class="signature-hint">Al escribir tu nombre confirmas que has leído y aceptas todo lo anterior, con la misma validez que una firma manuscrita.</p>
+        </div>
+
+        <!-- ¿CÓMO NOS HAS CONOCIDO? -->
+        <div class="form-group">
+          <label>¿Cómo nos has conocido?</label>
+          <select id="od-conocido">
+            <option value="">Selecciona una opción</option>
+            <option>Instagram</option>
+            <option>TikTok</option>
+            <option>Facebook</option>
+            <option>Google</option>
+            <option>Recomendación de un amigo/familiar</option>
+            <option>Cartel o flyer</option>
+            <option>Open Day</option>
+            <option>Otro</option>
+          </select>
+        </div>
+
+        <!-- Honeypot -->
+        <input type="text" id="od-honey" style="display:none;" tabindex="-1" autocomplete="off">
+
+        <button type="submit" class="btn" id="od-submit">Completar matrícula →</button>
+
+      </form>
+    </div>
+
+    <div class="success-msg" id="od-success">
+      <div class="icon">🎉</div>
+      <h2>¡Matrícula completada!</h2>
+      <p>Recibirás un email de confirmación con el reglamento y el resguardo de tu consentimiento de imagen.</p>
+      <p style="margin-top:12px;">¡Nos vemos en la pista! 💃🕺</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Dicharm Dance · Carrer d'Eusebi Güell 43, Sant Boi de Llobregat · dicharmdance@gmail.com
+</footer>
+
+<script>
+  function toggleAccordion(header) {
+    const body = header.nextElementSibling;
+    body.classList.toggle('open');
+    header.querySelector('span').textContent = body.classList.contains('open') ? '▲' : '▼';
+  }
+
+  function toggleClass(row) {
+    const checkbox = row.querySelector('input[type=checkbox]');
+    row.classList.toggle('selected');
+    checkbox.checked = row.classList.contains('selected');
+  }
+
+  document.getElementById('od-age').addEventListener('change', function() {
+    const menor = ['3-5 años (Predanza)','6-8 años (Kids)','9-11 años (Junior)','12-16 años (Youth)'];
+    const esMenor = menor.includes(this.value);
+    const sec = document.getElementById('od-tutor-section');
+    sec.style.display = esMenor ? 'block' : 'none';
+    ['od-t1-nombre','od-t1-tel','od-t1-email','od-t1-relacion','od-t1-dni'].forEach(id => {
+      document.getElementById(id).required = esMenor;
+    });
+  });
+
+  document.getElementById('openday-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    if (document.getElementById('od-honey').value) return;
+
+    const clases = Array.from(document.querySelectorAll('.class-row.selected'))
+      .map(r => r.dataset.name).join(', ');
+
+    if (!clases) {
+      alert('Por favor selecciona al menos una clase.');
+      return;
+    }
+
+    const btn = document.getElementById('od-submit');
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+
+    const datos = {
+      nombre:        document.getElementById('od-name').value.trim(),
+      email:         document.getElementById('od-email').value.trim(),
+      telefono:      document.getElementById('od-phone').value.trim(),
+      dni:           document.getElementById('od-dni').value.trim(),
+      fechaNacimiento: document.getElementById('od-fechanac').value,
+      edad:          document.getElementById('od-age').value,
+      clases,
+      aceptaReglamento: document.getElementById('od-reglamento').checked,
+      aceptaRgpd:    document.getElementById('od-rgpd').checked,
+      aceptaImagen:  document.getElementById('od-imagen').checked,
+      firma:         document.getElementById('od-firma').value.trim(),
+      comoNosConocio: document.getElementById('od-conocido').value,
+      tutor1Nombre:  document.getElementById('od-t1-nombre') ? document.getElementById('od-t1-nombre').value : '',
+      tutor1Tel:     document.getElementById('od-t1-tel') ? document.getElementById('od-t1-tel').value : '',
+      tutor1Email:   document.getElementById('od-t1-email') ? document.getElementById('od-t1-email').value : '',
+      tutor1Relacion: document.getElementById('od-t1-relacion') ? document.getElementById('od-t1-relacion').value : '',
+      tutor1Dni:     document.getElementById('od-t1-dni') ? document.getElementById('od-t1-dni').value : '',
+      tutor2Nombre:  document.getElementById('od-t2-nombre') ? document.getElementById('od-t2-nombre').value : '',
+      tutor2Tel:     document.getElementById('od-t2-tel') ? document.getElementById('od-t2-tel').value : '',
+      tutor2Email:   document.getElementById('od-t2-email') ? document.getElementById('od-t2-email').value : '',
+      tutor2Relacion: document.getElementById('od-t2-relacion') ? document.getElementById('od-t2-relacion').value : '',
+      tutor2Dni:     document.getElementById('od-t2-dni') ? document.getElementById('od-t2-dni').value : '',
+      fechaFirma:    new Date().toISOString(),
+    };
+
+    try {
+      const res = await fetch('/.netlify/functions/openday-register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos),
+      });
+      const result = await res.json();
+
+      if (result.ok) {
+        document.getElementById('form-content').style.display = 'none';
+        document.getElementById('od-success').style.display = 'block';
+      } else {
+        alert('Hubo un problema. Por favor contáctanos directamente.');
+        btn.disabled = false;
+        btn.textContent = 'Completar matrícula →';
+      }
+    } catch (err) {
+      alert('Error de conexión. Por favor contáctanos directamente.');
+      btn.disabled = false;
+      btn.textContent = 'Completar matrícula →';
+    }
+  });
+</script>
+
+</body>
+</html>
