@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¡Plaza confirmada! | Promo Aniversario Dicharm Dance</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Bebas+Neue&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:'Poppins',Arial,sans-serif;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(255,43,214,.25), transparent 45%),
+      radial-gradient(circle at 80% 30%, rgba(30,107,255,.25), transparent 45%),
+      #06040a;
+    color:#fff; min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    text-align:center; padding:30px;
+  }
+  .card{max-width:500px;}
+  .check{font-size:64px; margin-bottom:20px;}
+  h1{font-family:'Bebas Neue',sans-serif; font-size:42px; margin-bottom:14px;
+     background:linear-gradient(90deg,#ff2bd6,#8a2be2,#1e6bff); -webkit-background-clip:text; background-clip:text; color:transparent;}
+  p{color:#b9b3c9; font-size:16px; margin-bottom:10px;}
+  .fechas{background:rgba(255,255,255,.06); border-radius:14px; padding:18px; margin:20px 0; text-align:left; color:#fff; font-size:14px; line-height:1.8;}
+  a.btn{
+    display:inline-block; margin-top:24px; padding:14px 32px; border-radius:50px;
+    background:linear-gradient(90deg,#ff2bd6,#8a2be2,#1e6bff); color:#fff; text-decoration:none; font-weight:700;
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="check">🎉</div>
+    <h1>¡Tu plaza está confirmada!</h1>
+    <p>Hemos recibido tu pago. En unos minutos te llegará un email de bienvenida con toda la información.</p>
+    <div class="fechas" id="fechas"></div>
+    <p>📍 Carrer d'Eusebi Güell 43, Sant Boi de Llobregat</p>
+    <p>¡Nos vemos en la pista! 💃🕺</p>
+    <a class="btn" href="/">Volver a la web</a>
+  </div>
+  <script>
+    const FECHAS = {
+      salsa: '<strong>💃 Salsa</strong> · lunes de 21:30 a 22:30<br>30 de noviembre, 14 y 21 de diciembre',
+      bachata: '<strong>🕺 Bachata</strong> · jueves de 21:30 a 22:30<br>3, 10 y 17 de diciembre',
+    };
+    const opcion = new URLSearchParams(location.search).get('opcion');
+    const grupos = opcion === 'combo' ? ['salsa', 'bachata'] : (FECHAS[opcion] ? [opcion] : []);
+    const caja = document.getElementById('fechas');
+    if (grupos.length) caja.innerHTML = grupos.map((g) => FECHAS[g]).join('<br><br>');
+    else caja.style.display = 'none';
+  </script>
+</body>
+</html>

@@ -14,6 +14,8 @@
 //   SCHOOL_EMAIL_FROM         → email remitente verificado en Resend, ej: noreply@dicharmdance.com
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const promo = require('../lib/promo-aniversario');
+const { gestionarPagoPromo } = require('../lib/promo-webhook');
 
 exports.handler = async function (event) {
 console.log('Webhook recibido', event.httpMethod);
@@ -34,6 +36,12 @@ console.log('Webhook recibido', event.httpMethod);
   if (stripeEvent.type === 'checkout.session.completed') {
     const session = stripeEvent.data.object;
     const meta = session.metadata || {};
+
+    // Promo Aniversario (diciembre 2026): email, aviso y Sheets propios
+    if (meta.promo === promo.PROMO_ID) {
+      await gestionarPagoPromo(session);
+      return { statusCode: 200, body: JSON.stringify({ received: true }) };
+    }
 
     const cliente = {
       nombre: meta.nombre || '',
