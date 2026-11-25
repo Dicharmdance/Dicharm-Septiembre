@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Promo Aniversario — Salsa y Bachata 21:30 | Dicharm Dance</title>
-  <meta name="description" content="Grupos nuevos de iniciación de Salsa (lunes) y Bachata (jueves) de 21:30 a 22:30 en Sant Boi. Diciembre por 20 €, las dos por 30 €.">
+  <meta name="description" content="Grupos nuevos de iniciación de Bachata (lunes) y Salsa (jueves) de 21:30 a 22:30 en Sant Boi. Diciembre por 19 €, las dos por 29 €.">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Bebas+Neue&display=swap" rel="stylesheet">
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
@@ -35,6 +35,8 @@
     .price{text-align:right;flex-shrink:0;}
     .price .now{font-family:'Bebas Neue',sans-serif;font-size:34px;color:var(--gold);line-height:1;}
     .price .before{font-size:12px;color:var(--gray);text-decoration:line-through;}
+    .fee-note{font-size:12px;color:var(--gray);margin-top:10px;}
+    .summary .desglose{display:block;font-size:12px;font-weight:400;color:var(--gray);margin-top:2px;}
     .form-group{margin-bottom:18px;}
     .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
     @media(max-width:600px){.form-row{grid-template-columns:1fr;}}
@@ -89,42 +91,43 @@
 
       <div class="section-title-sm">💃 Elige tu clase</div>
       <div class="options" id="options">
-        <label class="option" data-opcion="salsa" data-precio="20">
-          <div class="info">
-            <input type="radio" name="opcion" value="salsa">
-            <div>
-              <div class="name">Salsa</div>
-              <div class="meta">Lunes 21:30 · 30/11, 14/12 y 21/12</div>
-              <div class="plazas" data-plazas="salsa"></div>
-            </div>
-          </div>
-          <div class="price"><div class="before">35 €</div><div class="now">20 €</div></div>
-        </label>
-
-        <label class="option" data-opcion="bachata" data-precio="20">
+        <label class="option" data-opcion="bachata" data-precio="19">
           <div class="info">
             <input type="radio" name="opcion" value="bachata">
             <div>
               <div class="name">Bachata</div>
-              <div class="meta">Jueves 21:30 · 3/12, 10/12 y 17/12</div>
+              <div class="meta">Lunes 21:30 · 30/11, 14/12 y 21/12</div>
               <div class="plazas" data-plazas="bachata"></div>
             </div>
           </div>
-          <div class="price"><div class="before">35 €</div><div class="now">20 €</div></div>
+          <div class="price"><div class="before">35 €</div><div class="now">19 €</div></div>
         </label>
 
-        <label class="option" data-opcion="combo" data-precio="30">
+        <label class="option" data-opcion="salsa" data-precio="19">
+          <div class="info">
+            <input type="radio" name="opcion" value="salsa">
+            <div>
+              <div class="name">Salsa</div>
+              <div class="meta">Jueves 21:30 · 3/12, 10/12 y 17/12</div>
+              <div class="plazas" data-plazas="salsa"></div>
+            </div>
+          </div>
+          <div class="price"><div class="before">35 €</div><div class="now">19 €</div></div>
+        </label>
+
+        <label class="option" data-opcion="combo" data-precio="29">
           <div class="info">
             <input type="radio" name="opcion" value="combo">
             <div>
-              <div class="name">Las dos: Salsa + Bachata</div>
+              <div class="name">Las dos: Bachata + Salsa</div>
               <div class="meta">Lunes y jueves 21:30 · 6 clases</div>
               <div class="plazas" data-plazas="combo"></div>
             </div>
           </div>
-          <div class="price"><div class="before">60 €</div><div class="now">30 €</div></div>
+          <div class="price"><div class="before">60 €</div><div class="now">29 €</div></div>
         </label>
       </div>
+      <p class="fee-note">Precios + gastos de gestión del pago con tarjeta (Stripe), que verás desglosados antes de pagar.</p>
 
       <div class="section-title-sm">👤 Tus datos</div>
       <div class="form-row">
@@ -185,7 +188,7 @@
 
       <input type="text" id="p-honey" style="display:none;" tabindex="-1" autocomplete="off">
 
-      <div class="summary"><span id="summary-text">Elige una opción</span><span class="total" id="summary-total">—</span></div>
+      <div class="summary"><span><span id="summary-text">Elige una opción</span><span class="desglose" id="summary-desglose"></span></span><span class="total" id="summary-total">—</span></div>
 
       <button type="submit" class="btn" id="p-submit">Reservar y pagar →</button>
       <p class="secure">🔒 Pago seguro con tarjeta a través de Stripe</p>
@@ -199,7 +202,13 @@
 </footer>
 
 <script>
-  const NOMBRES = { salsa: 'Salsa (lunes 21:30)', bachata: 'Bachata (jueves 21:30)', combo: 'Salsa + Bachata' };
+  const NOMBRES = { bachata: 'Bachata (lunes 21:30)', salsa: 'Salsa (jueves 21:30)', combo: 'Bachata + Salsa' };
+
+  // Misma fórmula que el servidor: precio + gastos de gestión de Stripe (1,5 % + 0,25 €)
+  function totalConStripe(base) {
+    return Math.ceil(((base + 0.25) / (1 - 0.015)) * 100) / 100;
+  }
+  const euros = (n) => n.toFixed(2).replace('.', ',') + ' €';
   let plazas = null;
 
   const opciones = document.querySelectorAll('.option');
@@ -213,7 +222,15 @@
   function actualizarResumen() {
     const sel = document.querySelector('.option.selected');
     document.getElementById('summary-text').textContent = sel ? NOMBRES[sel.dataset.opcion] : 'Elige una opción';
-    document.getElementById('summary-total').textContent = sel ? sel.dataset.precio + ' €' : '—';
+    if (!sel) {
+      document.getElementById('summary-desglose').textContent = '';
+      document.getElementById('summary-total').textContent = '—';
+      return;
+    }
+    const base = Number(sel.dataset.precio);
+    const total = totalConStripe(base);
+    document.getElementById('summary-desglose').textContent = `${euros(base)} + ${euros(total - base)} de gestión`;
+    document.getElementById('summary-total').textContent = euros(total);
   }
 
   opciones.forEach((op) => {

@@ -41,11 +41,11 @@
   </div>
   <script>
     const FECHAS = {
-      salsa: '<strong>💃 Salsa</strong> · lunes de 21:30 a 22:30<br>30 de noviembre, 14 y 21 de diciembre',
-      bachata: '<strong>🕺 Bachata</strong> · jueves de 21:30 a 22:30<br>3, 10 y 17 de diciembre',
+      bachata: '<strong>🕺 Bachata</strong> · lunes de 21:30 a 22:30<br>30 de noviembre, 14 y 21 de diciembre',
+      salsa: '<strong>💃 Salsa</strong> · jueves de 21:30 a 22:30<br>3, 10 y 17 de diciembre',
     };
     const opcion = new URLSearchParams(location.search).get('opcion');
-    const grupos = opcion === 'combo' ? ['salsa', 'bachata'] : (FECHAS[opcion] ? [opcion] : []);
+    const grupos = opcion === 'combo' ? ['bachata', 'salsa'] : (FECHAS[opcion] ? [opcion] : []);
     const caja = document.getElementById('fechas');
     if (grupos.length) caja.innerHTML = grupos.map((g) => FECHAS[g]).join('<br><br>');
     else caja.style.display = 'none';
