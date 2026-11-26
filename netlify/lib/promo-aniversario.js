@@ -51,8 +51,11 @@ function calcularTotalConStripe(precioBase) {
   return Math.ceil(((precioBase + 0.25) / (1 - 0.015)) * 100) / 100;
 }
 
+// Promo de diciembre ANULADA el 26/11/2026: no se aceptan más inscripciones.
+const PROMO_ANULADA = true;
+
 function promoCerrada(ahora = new Date()) {
-  return ahora.getTime() > CIERRE.getTime();
+  return PROMO_ANULADA || ahora.getTime() > CIERRE.getTime();
 }
 
 // Cuenta las plazas ocupadas por grupo a partir de las sesiones de Stripe:
